@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>wasm demo</title>
+  </head>
+  <body>
+        <script>
+            Module = {};
+            Module.onRuntimeInitialized = function () {
+                var ptr = allocate(intArrayFromString("玄魂"), 'i8', ALLOC_NORMAL);
+                var retPtr = Module._outName(ptr);
+                var resValue = UTF8ToString(retPtr);
+                console.log(resValue);
+                _free(ptr);
+
+                ptr = allocate(intArrayFromString('{"contactList":[{"phoneNumberList":[{"phoneNumber":"110","type":2},{"phoneNumber":"119","type":2},{"phoneNumber":"120","type":2}]}]}'), 'i8', ALLOC_NORMAL);
+                retPtr = Module._count_phone_book3(ptr);
+                resValue = UTF8ToString(retPtr);
+                console.log(resValue);
+                _free(ptr);
+            }
+        </script>
+        <script async type="text/javascript" src="calc.js"></script>
+    </body>
+</html>

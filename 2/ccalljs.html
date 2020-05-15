@@ -1,0 +1,19 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Emscripten:capi_js</title>
+  </head>
+  <body>
+    <script>
+    Module = {};
+    Module.onRuntimeInitialized = function() {
+      Module._print_the_answer();
+    }
+    </script>
+    <script src="ccalljs.js"></script>
+  </body>
+</html>
+
+

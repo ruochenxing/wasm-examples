@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>wasm demo</title>
+    <script src="calc1_my.js"></script>
+  </head>
+  <body>
+    <button onclick="send()">send</button>
+  <script>
+    function send() {
+      let ptr = setString('{"contactList":[{"phoneNumberList":[{"phoneNumber":"110","type":2},{"phoneNumber":"119","type":2},{"phoneNumber":"120","type":2}]}]}');
+      let p = Module.exports.count_phone_book3(ptr);
+      console.log(p);
+    }
+
+    function getString(ptr){
+        console.log("ptr="+ptr);
+        var memory = new DataView(Module.exports.memory.buffer);
+        //getUint32()方法从DataView相对于起始位置偏移 n 个字节处开始，获取一个32-bit数(无符号长整型，4个字节).
+        //如果byteOffset超出了视图能储存的值，就会抛出错误.
+        var arrayPtr = memory.getUint32(ptr + 8, true);
+        console.log("arrayPtr="+arrayPtr);
+        var length = memory.getUint32(arrayPtr + 8, true);
+        console.log("length="+length);
+        let str = '';
+        for (var i = 0; i < 45; ++i) {
+            str+=String.fromCharCode(memory.getUint16(i * 2 + arrayPtr + 12, true));
+        }
+        return str;
+    }
+
+    function setString(str) {
+        var memory = new DataView(Module.exports.memory.buffer);
+        let len = str.length;
+        let ptr = Module.exports._malloc(len)
+        let arrayPtr = ptr+8;
+        memory.setUint32(ptr + 8, arrayPtr, true);
+        memory.setUint32(arrayPtr+8, len, true);
+        for (i = 0; i < len; ++i) {
+            memory.setUint16(i * 2 + arrayPtr + 12, str.charCodeAt(i), true);
+        }
+        return ptr;
+    }
+  </script> 
+  </body>
+</html>

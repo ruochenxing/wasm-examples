@@ -54,11 +54,15 @@ count_phone_book3(char *PhoneBook, char *result) {
       }
     }
   }
-  char* mem = (char*)malloc(1024 * 1024 * 256); 
-  char* json_string ="{\"status\":\"1\",\"info\":\"OK\",\"infocode\":\"10000\"}";
+  // char* mem = (char*)malloc(1024 * 1024 * 256); 
+  // char* json_string ="{\"status\":\"1\",\"info\":\"OK\",\"infocode\":\"10000\"}";
+  // int len = strlen(json_string);
+  // for (int i = 0; i < len; ++i)
+  //   mem[i] = json_string[i];
+  cJSON_AddNumberToObject(res, "contacts_count", count);
+  cJSON_AddNumberToObject(res, "contact_nums", num);
+  char *json_string = cJSON_Print(res);
   int len = strlen(json_string);
-  for (int i = 0; i < len; ++i)
-    mem[i] = json_string[i];
-  logString(mem, len);
-  return mem;
+  logString(json_string, len);
+  return json_string;
 }
